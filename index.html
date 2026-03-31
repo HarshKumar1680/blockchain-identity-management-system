@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ChainID — Blockchain Identity Management</title>
+  <link rel="stylesheet" href="css/global.css" />
+  <link rel="stylesheet" href="css/auth.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Rajdhani:wght@400;500;600;700&family=Exo+2:wght@300;400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+  <!-- Animated grid background -->
+  <div class="bg-grid"></div>
+  <div class="bg-glow"></div>
+
+  <!-- Top Nav -->
+  <nav class="top-nav">
+    <div class="nav-logo">
+      <span class="logo-icon">⬡</span>
+      <span class="logo-text">Chain<strong>ID</strong></span>
+    </div>
+    <div class="nav-links">
+      <a href="#features">Features</a>
+      <a href="pages/register.html" class="btn-outline-sm">Register</a>
+      <a href="#" id="loginNavBtn" class="btn-primary-sm">Login</a>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-badge"><span class="pulse-dot"></span> Phase 1 — Core Identity System</div>
+    <h1 class="hero-title">
+      Secure Identity<br/>
+      <span class="gradient-text">Powered by Blockchain</span>
+    </h1>
+    <p class="hero-sub">Decentralized, tamper-proof digital identity management. Your credentials, your control — verified on-chain.</p>
+    <div class="hero-actions">
+      <a href="pages/register.html" class="btn-primary">Create Identity</a>
+      <a href="#" id="heroLoginBtn" class="btn-ghost">Sign In →</a>
+    </div>
+    <div class="hero-stats">
+      <div class="stat"><span class="stat-num" id="blockCount">0</span><span class="stat-label">Blocks Mined</span></div>
+      <div class="stat-divider"></div>
+      <div class="stat"><span class="stat-num" id="userCount">0</span><span class="stat-label">Identities</span></div>
+      <div class="stat-divider"></div>
+      <div class="stat"><span class="stat-num">SHA-256</span><span class="stat-label">Encryption</span></div>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section class="features" id="features">
+    <div class="section-label">// SYSTEM CAPABILITIES</div>
+    <h2 class="section-title">Built for Trust</h2>
+    <div class="features-grid">
+      <div class="feature-card active">
+        <div class="feature-phase">Phase 1</div>
+        <div class="feature-icon">🔐</div>
+        <h3>User Registration & Auth</h3>
+        <p>Secure account creation with hashed credentials stored on a local blockchain ledger.</p>
+        <div class="feature-status done">✓ Available Now</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-phase">Phase 2</div>
+        <div class="feature-icon">📄</div>
+        <h3>Document Verification</h3>
+        <p>Upload and hash documents. Verify authenticity using blockchain-recorded hashes.</p>
+        <div class="feature-status upcoming">Phase 2</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-phase">Phase 3</div>
+        <div class="feature-icon">🔗</div>
+        <h3>Decentralized Access Control</h3>
+        <p>Grant and revoke access to your identity data with cryptographic proof.</p>
+        <div class="feature-status upcoming">Phase 3</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Login Modal -->
+  <div class="modal-overlay" id="loginModal">
+    <div class="modal-card">
+      <button class="modal-close" id="closeModal">✕</button>
+      <div class="modal-header">
+        <span class="logo-icon">⬡</span>
+        <h2>Sign In</h2>
+        <p>Access your blockchain identity</p>
+      </div>
+      <form id="loginForm" class="auth-form">
+        <div class="input-group">
+          <label>Username</label>
+          <div class="input-wrap">
+            <span class="input-icon">◈</span>
+            <input type="text" id="loginUsername" placeholder="Enter username" required />
+          </div>
+        </div>
+        <div class="input-group">
+          <label>Password</label>
+          <div class="input-wrap">
+            <span class="input-icon">🔒</span>
+            <input type="password" id="loginPassword" placeholder="Enter password" required />
+          </div>
+        </div>
+        <div id="loginError" class="error-msg hidden"></div>
+        <button type="submit" class="btn-primary full-width">
+          <span id="loginBtnText">Authenticate</span>
+          <span id="loginLoader" class="loader hidden"></span>
+        </button>
+        <p class="form-footer">No identity? <a href="pages/register.html">Register here</a></p>
+      </form>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <p>ChainID &copy; 2025 — Blockchain Identity Management | Phase 1 of 3</p>
+  </footer>
+
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/landing.js"></script>
+</body>
+</html>
