@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Access Control — BlockID</title>
+  <link rel="stylesheet" href="../css/global.css"/>
+  <link rel="stylesheet" href="../css/dashboard.css"/>
+  <link rel="stylesheet" href="../css/access-control.css"/>
+</head>
+<body>
+  <div class="app-layout">
+    <aside class="sidebar">
+      <div class="sidebar-logo"><div class="logo-icon">⬡</div><span class="logo-text">Block<span class="accent">ID</span></span></div>
+      <nav class="sidebar-nav">
+        <a href="dashboard.html"      class="nav-item"><span class="nav-icon">◈</span><span class="nav-label">Overview</span></a>
+        <a href="dashboard.html#identity" class="nav-item"><span class="nav-icon">◉</span><span class="nav-label">My Identity</span></a>
+        <a href="documents.html"      class="nav-item"><span class="nav-icon">◧</span><span class="nav-label">Documents</span></a>
+        <a href="access-control.html" class="nav-item active"><span class="nav-icon">◈</span><span class="nav-label">Access Control</span></a>
+        <a href="keypairs.html"       class="nav-item"><span class="nav-icon">⬡</span><span class="nav-label">Key Pairs</span></a>
+        <a href="dashboard.html#blockchain" class="nav-item"><span class="nav-icon">⬢</span><span class="nav-label">Blockchain</span></a>
+      </nav>
+      <div class="sidebar-footer">
+        <div class="user-mini"><div class="user-avatar-sm" id="userAvatarSm">?</div><div class="user-info-sm"><span id="userNameSm">Loading...</span><span class="user-role">Identity Owner</span></div></div>
+        <button class="btn-logout" id="logoutBtn">⏻</button>
+      </div>
+    </aside>
+    <main class="main-content">
+      <header class="top-bar">
+        <div class="page-title"><h1>Access Control</h1><p class="page-subtitle">Manage consent and control who can view your identity &amp; documents</p></div>
+        <div class="top-bar-actions"><div class="chain-status"><span class="status-dot"></span><span>Chain Active</span></div></div>
+      </header>
+
+      <!-- Grant Access -->
+      <section class="ac-section">
+        <div class="section-header"><h2 class="section-title">Grant Access</h2><span class="section-badge">Consent-Based</span></div>
+        <div class="grant-form-card">
+          <div class="form-row">
+            <div class="form-group"><label class="form-label">Grant To (Username or Email)</label><input type="text" class="form-input" id="grantTarget" placeholder="username or email@example.com"/></div>
+            <div class="form-group"><label class="form-label">Access Level</label><select class="form-input" id="grantLevel"><option value="view">View Only</option><option value="verify">Verify Only</option><option value="full">Full Access</option></select></div>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label class="form-label">Share Documents</label><div class="doc-checkbox-list" id="docCheckboxList"><span style="color:var(--text-muted);font-size:0.85rem">Loading documents...</span></div></div>
+            <div class="form-group"><label class="form-label">Access Expires</label><select class="form-input" id="grantExpiry"><option value="1d">1 Day</option><option value="7d">7 Days</option><option value="30d">30 Days</option><option value="90d">90 Days</option><option value="never">Never</option></select></div>
+          </div>
+          <div class="form-group"><label class="form-label">Purpose / Note</label><input type="text" class="form-input" id="grantPurpose" placeholder="e.g. KYC for bank account opening"/></div>
+          <div class="form-error"   id="grantError"   style="display:none"></div>
+          <div class="form-success" id="grantSuccess" style="display:none"></div>
+          <div style="display:flex;justify-content:flex-end">
+            <button class="btn-primary" id="btnGrantAccess"><span id="grantBtnText">◈ Grant Access</span><span id="grantSpinner" class="spinner" style="display:none"></span></button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Active Grants -->
+      <section class="ac-section">
+        <div class="section-header"><h2 class="section-title">Active Grants</h2><span class="section-badge" id="activeGrantsBadge">0</span></div>
+        <div class="grants-table-wrap">
+          <table class="grants-table">
+            <thead><tr><th>Granted To</th><th>Documents</th><th>Level</th><th>Expires</th><th>Status</th><th>Action</th></tr></thead>
+            <tbody id="grantsTableBody"><tr><td colspan="6" class="table-empty">Loading grants...</td></tr></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Audit Log -->
+      <section class="ac-section">
+        <div class="section-header"><h2 class="section-title">Consent Audit Log</h2><span class="section-badge">Immutable</span></div>
+        <div class="audit-log-list" id="auditLogList"><div style="text-align:center;padding:30px"><div class="loading-spinner"></div></div></div>
+      </section>
+    </main>
+  </div>
+
+  <!-- Revoke Modal -->
+  <div class="modal-overlay" id="revokeGrantModal" style="display:none">
+    <div class="modal-box" style="max-width:420px">
+      <div class="modal-header"><h3>Revoke Access</h3><button class="modal-close" id="closeRevokeGrant">✕</button></div>
+      <div class="modal-body">
+        <p style="color:var(--text-secondary);margin-bottom:8px">Revoke access granted to <strong id="revokeGrantTarget">—</strong>?</p>
+        <p style="color:var(--text-muted);font-size:0.85rem;margin-bottom:20px">This action is recorded on the blockchain and cannot be undone.</p>
+        <div class="form-error" id="revokeGrantError" style="display:none"></div>
+        <div class="modal-actions"><button class="btn-secondary" id="cancelRevokeGrant">Cancel</button><button class="btn-danger" id="confirmRevokeGrant">Revoke Access</button></div>
+      </div>
+    </div>
+  </div>
+
+  <script src="../js/api.js"></script>
+  <script src="../js/access-control.js"></script>
+</body>
+</html>

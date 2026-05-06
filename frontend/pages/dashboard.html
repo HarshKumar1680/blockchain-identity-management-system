@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dashboard — BlockID</title>
+  <link rel="stylesheet" href="../css/global.css"/>
+  <link rel="stylesheet" href="../css/dashboard.css"/>
+</head>
+<body>
+  <div class="app-layout">
+    <aside class="sidebar">
+      <div class="sidebar-logo">
+        <div class="logo-icon">⬡</div>
+        <span class="logo-text">Block<span class="accent">ID</span></span>
+      </div>
+      <nav class="sidebar-nav">
+        <a href="#overview"   class="nav-item active" data-section="overview">  <span class="nav-icon">◈</span><span class="nav-label">Overview</span></a>
+        <a href="#identity"   class="nav-item"         data-section="identity"> <span class="nav-icon">◉</span><span class="nav-label">My Identity</span></a>
+        <a href="documents.html"    class="nav-item"><span class="nav-icon">◧</span><span class="nav-label">Documents</span></a>
+        <a href="access-control.html" class="nav-item"><span class="nav-icon">◈</span><span class="nav-label">Access Control</span></a>
+        <a href="keypairs.html"     class="nav-item"><span class="nav-icon">⬡</span><span class="nav-label">Key Pairs</span></a>
+        <a href="#blockchain" class="nav-item"         data-section="blockchain"><span class="nav-icon">⬢</span><span class="nav-label">Blockchain</span></a>
+      </nav>
+      <div class="sidebar-footer">
+        <div class="user-mini">
+          <div class="user-avatar-sm" id="userAvatarSm">?</div>
+          <div class="user-info-sm">
+            <span id="userNameSm">Loading...</span>
+            <span class="user-role">Identity Owner</span>
+          </div>
+        </div>
+        <button class="btn-logout" id="logoutBtn" title="Logout">⏻</button>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <header class="top-bar">
+        <div class="page-title">
+          <h1 id="pageHeading">Overview</h1>
+          <p class="page-subtitle" id="pageSubtitle">Welcome to your BlockID dashboard</p>
+        </div>
+        <div class="top-bar-actions">
+          <div class="chain-status"><span class="status-dot"></span><span>Chain Active</span></div>
+        </div>
+      </header>
+
+      <!-- OVERVIEW -->
+      <section class="dash-section" id="section-overview">
+        <div class="stats-row">
+          <div class="stat-card"><div class="stat-card-icon">⬢</div><div class="stat-card-info"><span class="stat-card-num" id="totalBlocks">—</span><span class="stat-card-label">Total Blocks</span></div></div>
+          <div class="stat-card"><div class="stat-card-icon">◉</div><div class="stat-card-info"><span class="stat-card-num" id="totalIdentities">—</span><span class="stat-card-label">Identities</span></div></div>
+          <div class="stat-card"><div class="stat-card-icon">◧</div><div class="stat-card-info"><span class="stat-card-num" id="totalDocuments">—</span><span class="stat-card-label">Documents</span></div></div>
+          <div class="stat-card"><div class="stat-card-icon">◈</div><div class="stat-card-info"><span class="stat-card-num" id="chainValid">—</span><span class="stat-card-label">Chain Status</span></div></div>
+        </div>
+        <div class="overview-grid">
+          <div class="overview-card"><h3 class="card-title">Your Identity Block</h3><div id="identityMini"><div class="loading-spinner"></div></div></div>
+          <div class="overview-card"><h3 class="card-title">Latest Block</h3><div id="latestBlock"><div class="loading-spinner"></div></div></div>
+        </div>
+        <div class="quick-links">
+          <h3 class="card-title" style="margin-bottom:16px">Quick Actions</h3>
+          <div class="quick-links-grid">
+            <a href="documents.html"      class="quick-link-card"><span class="quick-link-icon">◧</span><span class="quick-link-label">Upload Document</span><span class="quick-link-arrow">→</span></a>
+            <a href="access-control.html" class="quick-link-card"><span class="quick-link-icon">◈</span><span class="quick-link-label">Grant Access</span><span class="quick-link-arrow">→</span></a>
+            <a href="keypairs.html"       class="quick-link-card"><span class="quick-link-icon">⬡</span><span class="quick-link-label">Manage Keys</span><span class="quick-link-arrow">→</span></a>
+            <a href="#blockchain" class="quick-link-card" data-section="blockchain" id="viewChainLink"><span class="quick-link-icon">⬢</span><span class="quick-link-label">View Chain</span><span class="quick-link-arrow">→</span></a>
+          </div>
+        </div>
+      </section>
+
+      <!-- IDENTITY -->
+      <section class="dash-section" id="section-identity" style="display:none">
+        <div class="identity-card-full" id="identityCardFull"><div class="loading-spinner"></div></div>
+      </section>
+
+      <!-- BLOCKCHAIN -->
+      <section class="dash-section" id="section-blockchain" style="display:none">
+        <div class="blockchain-toolbar">
+          <button class="btn-primary" id="validateChainBtn">◈ Validate Chain</button>
+          <div class="chain-info" id="chainInfo"></div>
+        </div>
+        <div class="blocks-list" id="blocksList"><div class="loading-spinner"></div></div>
+      </section>
+    </main>
+  </div>
+
+  <!-- Block Modal -->
+  <div class="modal-overlay" id="blockModal" style="display:none">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3 id="modalBlockTitle">Block Details</h3>
+        <button class="modal-close" id="closeBlockModal">✕</button>
+      </div>
+      <div class="modal-body" id="modalBlockBody"></div>
+    </div>
+  </div>
+
+  <script src="../js/api.js"></script>
+  <script src="../js/dashboard.js"></script>
+</body>
+</html>

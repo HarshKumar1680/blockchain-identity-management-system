@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Documents — BlockID</title>
+  <link rel="stylesheet" href="../css/global.css"/>
+  <link rel="stylesheet" href="../css/dashboard.css"/>
+  <link rel="stylesheet" href="../css/documents.css"/>
+</head>
+<body>
+  <div class="app-layout">
+    <aside class="sidebar">
+      <div class="sidebar-logo"><div class="logo-icon">⬡</div><span class="logo-text">Block<span class="accent">ID</span></span></div>
+      <nav class="sidebar-nav">
+        <a href="dashboard.html"      class="nav-item"><span class="nav-icon">◈</span><span class="nav-label">Overview</span></a>
+        <a href="dashboard.html#identity" class="nav-item"><span class="nav-icon">◉</span><span class="nav-label">My Identity</span></a>
+        <a href="documents.html"      class="nav-item active"><span class="nav-icon">◧</span><span class="nav-label">Documents</span></a>
+        <a href="access-control.html" class="nav-item"><span class="nav-icon">◈</span><span class="nav-label">Access Control</span></a>
+        <a href="keypairs.html"       class="nav-item"><span class="nav-icon">⬡</span><span class="nav-label">Key Pairs</span></a>
+        <a href="dashboard.html#blockchain" class="nav-item"><span class="nav-icon">⬢</span><span class="nav-label">Blockchain</span></a>
+      </nav>
+      <div class="sidebar-footer">
+        <div class="user-mini"><div class="user-avatar-sm" id="userAvatarSm">?</div><div class="user-info-sm"><span id="userNameSm">Loading...</span><span class="user-role">Identity Owner</span></div></div>
+        <button class="btn-logout" id="logoutBtn">⏻</button>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <header class="top-bar">
+        <div class="page-title"><h1>Document Vault</h1><p class="page-subtitle">Upload, hash &amp; verify documents on the blockchain</p></div>
+        <div class="top-bar-actions"><div class="chain-status"><span class="status-dot"></span><span>Chain Active</span></div></div>
+      </header>
+
+      <!-- Upload -->
+      <section class="doc-section">
+        <div class="section-header"><h2 class="section-title">Upload Document</h2><span class="section-badge">SHA-256 Hashed</span></div>
+        <div class="upload-dropzone" id="uploadDropzone">
+          <div class="drop-icon">◧</div>
+          <h3>Drop your document here</h3>
+          <p>or <span class="browse-link" id="browseBtn">browse files</span></p>
+          <p class="drop-hint">PDF, JPG, PNG, DOCX, TXT — up to 10MB</p>
+          <input type="file" id="fileInput" accept=".pdf,.jpg,.jpeg,.png,.docx,.txt" style="display:none"/>
+        </div>
+        <div class="file-preview-bar" id="filePreviewBar" style="display:none">
+          <div class="file-preview-icon" id="filePreviewIcon">📄</div>
+          <div class="file-preview-meta">
+            <div class="file-preview-name" id="filePreviewName">—</div>
+            <div class="file-preview-size" id="filePreviewSize">—</div>
+          </div>
+          <div class="file-hash-display">
+            <span class="hash-pill-label">SHA-256</span>
+            <span class="hash-pill-value" id="fileHashPreview">Computing...</span>
+          </div>
+          <button class="btn-remove" id="btnRemoveFile">✕</button>
+        </div>
+        <div class="upload-form-card" id="uploadFormCard" style="display:none">
+          <div class="form-row">
+            <div class="form-group"><label class="form-label">Document Name</label><input type="text" class="form-input" id="docName" placeholder="e.g. National ID Card"/></div>
+            <div class="form-group"><label class="form-label">Document Type</label>
+              <select class="form-input" id="docType">
+                <option value="identity">Identity Document</option>
+                <option value="certificate">Certificate</option>
+                <option value="license">License</option>
+                <option value="medical">Medical Record</option>
+                <option value="financial">Financial Document</option>
+                <option value="other">Other</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group"><label class="form-label">Description (optional)</label><input type="text" class="form-input" id="docDescription" placeholder="Brief description"/></div>
+          <div class="form-error" id="uploadError" style="display:none"></div>
+          <div class="upload-form-actions">
+            <button class="btn-secondary" id="btnCancelUpload">Cancel</button>
+            <button class="btn-primary"   id="btnUpload"><span id="uploadBtnText">⬡ Anchor to Blockchain</span><span id="uploadSpinner" class="spinner" style="display:none"></span></button>
+          </div>
+        </div>
+        <div class="upload-success-card" id="uploadSuccessCard" style="display:none">
+          <div class="success-ring-wrap"><div class="success-ring"></div><div class="success-check">✓</div></div>
+          <h3>Document Anchored!</h3>
+          <p>Your document hash has been permanently recorded on the blockchain</p>
+          <div class="success-tx">
+            <div class="tx-row"><span>Block Height</span><span id="txBlock">—</span></div>
+            <div class="tx-row"><span>Block Hash</span><span id="txHash" class="mono-small">—</span></div>
+            <div class="tx-row"><span>Anchored At</span><span id="txTime">—</span></div>
+          </div>
+          <button class="btn-primary" id="btnUploadAnother">Upload Another</button>
+        </div>
+      </section>
+
+      <!-- Verify -->
+      <section class="doc-section">
+        <div class="section-header"><h2 class="section-title">Verify Document</h2><span class="section-badge">Tamper Detection</span></div>
+        <div class="verify-card">
+          <div class="verify-drop" id="verifyDrop">
+            <span class="verify-drop-icon">◉</span>
+            <p>Drop a document to verify, or <span class="browse-link" id="verifyBrowse">browse</span></p>
+            <p class="drop-hint">We'll compute its hash and check the blockchain</p>
+            <input type="file" id="verifyInput" accept=".pdf,.jpg,.jpeg,.png,.docx,.txt" style="display:none"/>
+          </div>
+          <div class="verify-result-wrap" id="verifyResultWrap" style="display:none">
+            <div class="verify-hash-row"><span class="hash-pill-label">SHA-256</span><span class="hash-pill-value mono-small" id="verifyHashVal">—</span></div>
+            <div id="verifyStatusBlock"></div>
+            <button class="btn-secondary btn-sm" id="btnVerifyReset">Verify Another</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- List -->
+      <section class="doc-section">
+        <div class="section-header">
+          <h2 class="section-title">My Documents</h2>
+          <div class="list-filters">
+            <input type="text" class="search-input" id="docSearch" placeholder="Search..."/>
+            <select class="filter-select" id="docFilter">
+              <option value="all">All Types</option>
+              <option value="identity">Identity</option>
+              <option value="certificate">Certificate</option>
+              <option value="license">License</option>
+              <option value="medical">Medical</option>
+              <option value="financial">Financial</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+        </div>
+        <div class="docs-grid" id="docsGrid"><div style="text-align:center;padding:40px"><div class="loading-spinner"></div></div></div>
+      </section>
+    </main>
+  </div>
+
+  <!-- Doc Detail Modal -->
+  <div class="modal-overlay" id="docDetailModal" style="display:none">
+    <div class="modal-box">
+      <div class="modal-header"><h3 id="modalDocTitle">Document Details</h3><button class="modal-close" id="closeDocModal">✕</button></div>
+      <div class="modal-body"><div class="doc-detail-grid" id="docDetailGrid"></div><div class="modal-actions" id="docModalActions"></div></div>
+    </div>
+  </div>
+
+  <!-- Revoke Modal -->
+  <div class="modal-overlay" id="revokeDocModal" style="display:none">
+    <div class="modal-box" style="max-width:420px">
+      <div class="modal-header"><h3>Revoke Document</h3><button class="modal-close" id="closeRevokeDocModal">✕</button></div>
+      <div class="modal-body">
+        <p style="color:var(--text-secondary);margin-bottom:12px">Revoking <strong id="revokeDocName">this document</strong> will mark it as invalid on the blockchain permanently.</p>
+        <div class="form-error" id="revokeError" style="display:none"></div>
+        <div class="modal-actions">
+          <button class="btn-secondary" id="cancelRevokeDoc">Cancel</button>
+          <button class="btn-danger"    id="confirmRevokeDoc">Revoke Document</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="../js/api.js"></script>
+  <script src="../js/documents.js"></script>
+</body>
+</html>

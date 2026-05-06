@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Key Pairs — BlockID</title>
+  <link rel="stylesheet" href="../css/global.css"/>
+  <link rel="stylesheet" href="../css/dashboard.css"/>
+  <link rel="stylesheet" href="../css/keypairs.css"/>
+</head>
+<body>
+  <div class="app-layout">
+    <aside class="sidebar">
+      <div class="sidebar-logo"><div class="logo-icon">⬡</div><span class="logo-text">Block<span class="accent">ID</span></span></div>
+      <nav class="sidebar-nav">
+        <a href="dashboard.html"      class="nav-item"><span class="nav-icon">◈</span><span class="nav-label">Overview</span></a>
+        <a href="dashboard.html#identity" class="nav-item"><span class="nav-icon">◉</span><span class="nav-label">My Identity</span></a>
+        <a href="documents.html"      class="nav-item"><span class="nav-icon">◧</span><span class="nav-label">Documents</span></a>
+        <a href="access-control.html" class="nav-item"><span class="nav-icon">◈</span><span class="nav-label">Access Control</span></a>
+        <a href="keypairs.html"       class="nav-item active"><span class="nav-icon">⬡</span><span class="nav-label">Key Pairs</span></a>
+        <a href="dashboard.html#blockchain" class="nav-item"><span class="nav-icon">⬢</span><span class="nav-label">Blockchain</span></a>
+      </nav>
+      <div class="sidebar-footer">
+        <div class="user-mini"><div class="user-avatar-sm" id="userAvatarSm">?</div><div class="user-info-sm"><span id="userNameSm">Loading...</span><span class="user-role">Identity Owner</span></div></div>
+        <button class="btn-logout" id="logoutBtn">⏻</button>
+      </div>
+    </aside>
+    <main class="main-content">
+      <header class="top-bar">
+        <div class="page-title"><h1>Key Pairs</h1><p class="page-subtitle">RSA cryptographic keys for signing &amp; verifying your digital identity</p></div>
+        <div class="top-bar-actions"><div class="chain-status"><span class="status-dot"></span><span>Chain Active</span></div></div>
+      </header>
+
+      <!-- Active Key -->
+      <section class="kp-section">
+        <div class="section-header"><h2 class="section-title">Active Key Pair</h2><span class="section-badge" id="keyStatusBadge">Loading...</span></div>
+        <div id="activeKeyCard"><div style="text-align:center;padding:40px"><div class="loading-spinner"></div></div></div>
+      </section>
+
+      <!-- Generate -->
+      <section class="kp-section">
+        <div class="section-header"><h2 class="section-title">Generate New Key Pair</h2><span class="section-badge warn">Web Crypto API</span></div>
+        <div class="generate-card">
+          <div class="generate-info-row">
+            <div class="generate-icon">⬡</div>
+            <div class="generate-info-text">
+              <h3>Create a New Cryptographic Key Pair</h3>
+              <p>Generated in your browser using the Web Crypto API. Your private key is shown once — save it securely. Only the public key is stored on the blockchain.</p>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label class="form-label">Key Label</label><input type="text" class="form-input" id="keyLabel" placeholder="e.g. Primary Identity Key 2024"/></div>
+            <div class="form-group"><label class="form-label">Algorithm</label><select class="form-input" id="keyAlgo"><option value="RSA-PSS">RSA-PSS (Recommended)</option><option value="ECDSA">ECDSA P-256</option></select></div>
+          </div>
+          <div class="form-error" id="generateError" style="display:none"></div>
+          <div class="generate-actions">
+            <button class="btn-primary" id="btnGenerateKey"><span id="generateBtnText">⬡ Generate Key Pair</span><span id="generateSpinner" class="spinner" style="display:none"></span></button>
+          </div>
+          <div class="new-key-result" id="newKeyResult" style="display:none">
+            <div class="key-warning-banner">⚠ Save your private key now — it will NOT be shown again!</div>
+            <div class="key-result-grid">
+              <div class="key-result-block"><div class="key-result-label">Public Key (stored on blockchain)</div><textarea class="key-textarea" id="newPublicKey" readonly></textarea><button class="btn-copy" data-target="newPublicKey">Copy</button></div>
+              <div class="key-result-block"><div class="key-result-label">Private Key (save this securely!)</div><textarea class="key-textarea private" id="newPrivateKey" readonly></textarea><button class="btn-copy" data-target="newPrivateKey">Copy</button></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Sign & Verify -->
+      <section class="kp-section">
+        <div class="section-header"><h2 class="section-title">Sign &amp; Verify Message</h2><span class="section-badge">Digital Signature</span></div>
+        <div class="sign-verify-grid">
+          <div class="sign-card">
+            <h3 class="sign-card-title">Sign a Message</h3>
+            <div class="form-group"><label class="form-label">Message to Sign</label><textarea class="form-input key-textarea" id="signMessage" placeholder="Enter any message to sign..." rows="3"></textarea></div>
+            <div class="form-group"><label class="form-label">Your Private Key (PEM)</label><textarea class="form-input key-textarea private" id="signPrivateKey" placeholder="Paste your private key..." rows="4"></textarea></div>
+            <div class="form-error" id="signError" style="display:none"></div>
+            <button class="btn-primary" id="btnSign">Sign Message</button>
+            <div class="sign-result" id="signResult" style="display:none">
+              <div class="key-result-label">Signature (Base64)</div>
+              <textarea class="key-textarea" id="signatureOutput" readonly rows="3"></textarea>
+              <button class="btn-copy" data-target="signatureOutput">Copy Signature</button>
+            </div>
+          </div>
+          <div class="sign-card">
+            <h3 class="sign-card-title">Verify a Signature</h3>
+            <div class="form-group"><label class="form-label">Original Message</label><textarea class="form-input key-textarea" id="verifyMessage" placeholder="Enter the original message..." rows="3"></textarea></div>
+            <div class="form-group"><label class="form-label">Signature (Base64)</label><textarea class="form-input key-textarea" id="verifySignature" placeholder="Paste the signature..." rows="3"></textarea></div>
+            <div class="form-group"><label class="form-label">Public Key (PEM)</label><textarea class="form-input key-textarea" id="verifyPublicKey" placeholder="Paste the public key..." rows="3"></textarea></div>
+            <div class="form-error" id="verifyError" style="display:none"></div>
+            <button class="btn-primary" id="btnVerify">Verify Signature</button>
+            <div class="verify-sig-result" id="verifySigResult" style="display:none"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Key History -->
+      <section class="kp-section">
+        <div class="section-header"><h2 class="section-title">Key History</h2><span class="section-badge">Blockchain Anchored</span></div>
+        <div class="key-history-list" id="keyHistoryList"><div style="text-align:center;padding:30px"><div class="loading-spinner"></div></div></div>
+      </section>
+    </main>
+  </div>
+  <script src="../js/api.js"></script>
+  <script src="../js/keypairs.js"></script>
+</body>
+</html>
